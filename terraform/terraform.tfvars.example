@@ -1,0 +1,27 @@
+# ===========================
+# Exemplo de terraform.tfvars
+# Copie para terraform.tfvars e preencha os valores reais
+# NÃO comite o arquivo terraform.tfvars com valores sensíveis
+# ===========================
+
+# Região AWS
+aws_region       = "us-east-1"            # ex: "us-east-1"
+
+# Identidade do projeto / tags
+project_name     = "aws-express-infra"    # nome/prefixo para recursos
+environment_name = "dev"                  # ex: "dev", "staging", "prod"
+owner_name       = "seu-nome"             # ex: "usuário"
+
+# EC2
+instance_type    = "t3.micro"             # ex: "t3.micro", "t3.small"
+
+# SSH
+ssh_key_name     = "minha-keypair"        # nome do Key Pair existente na AWS
+ssh_ingress_cidr = "0.0.0.0/0"            # ex: "203.0.113.45/32" (se seu IP for fixo) ou "0.0.0.0/0" (temporário / inseguro)
+
+# Domínio / Route53
+domain_name      = "seudominio.com.br"    # domínio raiz (ex: "meudominio.com.br")
+
+# EIP e SSM (booleanos)
+create_eip       = true                   # true para alocar Elastic IP (IP público fixo), false para usar IP público efêmero
+enable_ssm       = true                   # true para anexar role SSM (acesso via Session Manager)
