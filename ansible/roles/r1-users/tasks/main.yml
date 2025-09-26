@@ -1,0 +1,7 @@
+---
+# Garante que o usuário do aplicativo existe, caso contrário cria
+- name: Ensure app user exists
+  user:
+    name: "{{ app_user }}"
+    shell: /bin/bash
+    create_home: yes
