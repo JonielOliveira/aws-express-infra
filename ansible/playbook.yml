@@ -1,0 +1,19 @@
+---
+- name: Provisionar servidor para API
+  hosts: api
+  become: true
+
+  vars_files:
+    - group_vars/all.yml
+    - group_vars/vault.yml
+  
+  roles:
+    - { role: r1-users, tags: ["users", "infra"] }
+    - { role: r2-common, tags: ["common", "infra"] }
+    - { role: r3-tmp, tags: ["tmp", "infra"] }
+    - { role: r4-node, tags: ["node", "infra"] }
+    - { role: r5-nginx, tags: ["nginx", "infra"] }
+    - { role: r6-certbot, tags: ["certbot", "infra"] }
+    - { role: r7-api, tags: ["api", "app"] }
+    - { role: r8-pm2, tags: ["pm2", "app"] }
+    - { role: r9-nginx-api, tags: ["nginx-api", "app"] }
