@@ -1,0 +1,35 @@
+---
+# 0) Garante ACL instalado
+- name: Ensure ACL package is present
+  apt:
+    name: acl
+    state: present
+    update_cache: yes
+  become: true
+
+# 1) /tmp com modo padrão
+- name: Ensure /tmp has sticky bit and open perms
+  file:
+    path: /tmp
+    state: directory
+    mode: "1777"
+  become: true
+
+# 2) Cria /tmp/.ansible privado ao usuário de conexão (ex.: ubuntu)
+- name: Ensure /tmp/.ansible exists (private to connection user)
+  file:
+    path: /tmp/.ansible
+    state: directory
+    owner: "{{ ansible_user | default('ubuntu') }}"
+    group: "{{ ansible_user | default('ubuntu') }}"
+    mode: "0700"
+  become: true
+
+# 3) Dá ACL para o app_user poder escrever lá (e para futuros arquivos)
+- name: Allow app_user to use /tmp/.ansible via ACL
+  command: setfacl -m u:{{ app_user }}:rwx /tmp/.ansible
+  become: true
+
+- name: Set default ACL so new files inherit perms for app_user
+  command: setfacl -d -m u:{{ app_user }}:rwx /tmp/.ansible
+  become: true
