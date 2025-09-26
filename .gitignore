@@ -32,12 +32,36 @@ terraform.tfstate.backup
 # Ansible
 # ======================
 *.retry
-*.vault.pass
 # inventários contendo IPs/credenciais (se quiser manter fora do repo)
 ansible/inventory/*
-!ansible/inventory/hosts.example   # mantenha um exemplo sem dados sensíveis
+!ansible/inventory/hosts.example
+!ansible/inventory/inventory.template
+
+ansible/inventories/*
+!ansible/inventories/hosts.example
+!ansible/inventories/*.template
+
 group_vars/*/*.vault.yml
 host_vars/*/*.vault.yml
+
+# Ignorar all.yml real
+ansible/group_vars/all.yml
+
+# Permitir arquivos de exemplo e vault.yml
+!ansible/group_vars/all.yml.example
+!ansible/group_vars/vault.yml
+
+# Vault
+*.vault.pass
+vault_pass.txt
+vault_pass.sh
+.vault_pass*
+**/vault_pass.*
+!.vault.example.txt
+!vault_pass.sh.example
+
+# configurações locais do Ansible
+ansible.cfg
 
 # ======================
 # Chaves privadas / certificados / segredos
