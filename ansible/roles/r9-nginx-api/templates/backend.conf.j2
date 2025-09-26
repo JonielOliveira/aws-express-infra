@@ -1,0 +1,22 @@
+server {
+    listen 80;
+    server_name {{ full_domain }};
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    server_name {{ full_domain }};
+
+    ssl_certificate /etc/letsencrypt/live/{{ full_domain }}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/{{ full_domain }}/privkey.pem;
+
+    location / {
+        proxy_pass {{ app_url }};
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+}

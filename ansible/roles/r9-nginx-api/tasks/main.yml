@@ -1,0 +1,34 @@
+---
+- name: Cria configuração NGINX para o backend
+  template:
+    src: backend.conf.j2
+    dest: /etc/nginx/sites-available/{{ full_domain }}
+    mode: '0644'
+  notify: Reload nginx
+
+- name: Ativa site NGINX do backend
+  file:
+    src: /etc/nginx/sites-available/{{ full_domain }}
+    dest: /etc/nginx/sites-enabled/{{ full_domain }}
+    state: link
+    force: yes
+  notify: Reload nginx
+
+- name: Remove default site do NGINX (se existir)
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+    force: yes
+  notify: Reload nginx
+
+- name: Valida configuração do NGINX
+  command: nginx -t
+  register: nginx_test_result
+  changed_when: false
+  failed_when: nginx_test_result.rc != 0
+
+- name: Reinicia o NGINX
+  service:
+    name: nginx
+    state: restarted
+    enabled: true
