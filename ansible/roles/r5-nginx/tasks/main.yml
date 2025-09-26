@@ -1,0 +1,33 @@
+---
+- name: Instala o NGINX
+  apt:
+    name: nginx
+    state: present
+    update_cache: yes
+
+- name: Remove default site
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+  ignore_errors: yes
+  notify: Reload nginx
+
+- name: Copia template do site nginx
+  template:
+    src: site.conf.j2
+    dest: /etc/nginx/sites-available/{{ full_domain }}
+    mode: '0644'
+  notify: Reload nginx
+
+- name: Habilita site
+  file:
+    src: /etc/nginx/sites-available/{{ full_domain }}
+    dest: /etc/nginx/sites-enabled/{{ full_domain }}
+    state: link
+  notify: Reload nginx
+
+- name: Garante nginx ativo
+  service:
+    name: nginx
+    state: started
+    enabled: yes
