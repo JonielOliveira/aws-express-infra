@@ -1,0 +1,31 @@
+---
+# Domínio e subdomínio da aplicação
+domain: "example.com"
+subdomain: "app"
+full_domain: "{{ subdomain }}.{{ domain }}"
+
+# Email usado pelo Certbot/Let's Encrypt
+certbot_email: "admin@example.com"
+
+# Usuário do sistema responsável pela aplicação
+app_user: "deploy"
+
+# Configuração da aplicação (host/porta/url)
+app_host: "localhost"
+app_port: 5000
+app_url: "http://{{ app_host }}:{{ app_port }}"
+
+# Estrutura de diretórios
+repo_dir: "/opt/project"                  # diretório raiz onde o repositório será clonado
+service_name: "service"               # nome do serviço dentro do repo
+app_dir: "{{ repo_dir }}/{{ service_name }}"  # diretório da aplicação
+
+# Repositório Git da aplicação
+repo_url: "https://github.com/username/repository.git"
+repo_branch: "main"
+
+# Configuração do Node.js
+node_version: "18"                    # versão a instalar (via NodeSource)
+
+# Arquivo de variáveis de ambiente (NÃO versionar com segredos)
+env_file: ".env"
