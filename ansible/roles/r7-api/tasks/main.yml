@@ -1,0 +1,61 @@
+---
+- name: Clona/atualiza repositório (via HTTPS, como root)
+  git:
+    repo: "{{ repo_url }}"
+    dest: "{{ repo_dir }}"
+    version: "{{ repo_branch }}"
+    update: yes
+    force: yes
+  become: true
+
+# Verifica se existe package-lock.json no host remoto
+- name: Check if package-lock.json exists
+  stat:
+    path: "{{ app_dir }}/package-lock.json"
+  register: pkg_lock
+  become: true
+
+# Instala dependências de forma determinística
+- name: Install dependencies (npm ci) as app_user
+  command: npm ci
+  args:
+    chdir: "{{ app_dir }}"
+  become: true
+  # roda só se houver package-lock.json
+  when: pkg_lock.stat.exists
+
+# Lê package.json remoto para decidir se tem script build
+- name: Read package.json
+  slurp:
+    path: "{{ app_dir }}/package.json"
+  register: pkg_json_raw
+  become: true
+
+- name: Parse package.json
+  set_fact:
+    pkg_json: "{{ pkg_json_raw.content | b64decode | from_json }}"
+
+# Builda só se existir scripts.build
+- name: Build app (npm run build) as app_user
+  command: npm run build
+  args:
+    chdir: "{{ app_dir }}"
+  become: true
+  when: pkg_json.scripts is defined and 'build' in pkg_json.scripts
+
+# Copia .env (se definido)
+- name: Copy .env (use Ansible Vault se contiver segredos)
+  template:
+    src: .env.j2
+    dest: "{{ app_dir }}/.env"
+    mode: '0600'
+  become: true
+
+# Ajusta dono e permissões para o usuário da app
+- name: Ajusta dono e permissões para o usuário da app
+  file:
+    path: "{{ repo_dir }}"
+    owner: "{{ app_user }}"
+    group: "{{ app_user }}"
+    recurse: yes
+  become: true
