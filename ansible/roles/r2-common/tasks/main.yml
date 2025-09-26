@@ -1,0 +1,41 @@
+---
+# Atualiza pacotes do sistema
+- name: Atualiza os pacotes do sistema
+  apt:
+    update_cache: yes
+    upgrade: dist
+    cache_valid_time: 3600
+
+# Utilitários essenciais para o sistema
+- name: Instalar utilitários básicos
+  apt:
+    name:
+      - acl
+      - curl
+      - git
+      - htop
+      - lsb-release
+      - lsof
+      - rsync
+      - tmux
+      - unzip
+    state: present
+
+# Pacotes para compilação e repositórios adicionais
+- name: Instalar ferramentas de desenvolvimento e suporte
+  apt:
+    name:
+      - build-essential
+      - software-properties-common
+      - ca-certificates
+      - gnupg
+    state: present
+
+# Segurança e rede
+- name: Instalar ferramentas de segurança e rede
+  apt:
+    name:
+      - ufw
+      - fail2ban
+      - net-tools
+    state: present
