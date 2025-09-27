@@ -24,15 +24,13 @@
   become_user: "{{ app_user }}"
   when: pm2_restart is failed
 
-# Salva os processos do PM2
+# Configura o serviço systemd do PM2 para o app_user (não root)
+- name: PM2 startup (systemd) for app_user
+  command: pm2 startup systemd -u {{ app_user }} --hp /home/{{ app_user }}
+  become: true
+
+# Salva o estado dos processos no HOME do app_user (~/.pm2/dump.pm2)
 - name: Salva os processos do PM2
   command: pm2 save
   become: true
   become_user: "{{ app_user }}"
-
-# Configura PM2 para iniciar no boot
-- name: Configura PM2 para iniciar no boot
-  command: pm2 startup systemd --silent
-  register: pm2_startup
-  changed_when: "'[PM2] Init System found: systemd' in pm2_startup.stdout"
-  become: true
