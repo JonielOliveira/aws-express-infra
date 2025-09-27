@@ -11,6 +11,8 @@ certbot_email: "admin@example.com"
 app_user: "deploy"
 
 # Configuração da aplicação (host/porta/url)
+app_name: "api"
+app_entrypoint: "dist/index.js"
 app_host: "localhost"
 app_port: 5000
 app_url: "http://{{ app_host }}:{{ app_port }}"
