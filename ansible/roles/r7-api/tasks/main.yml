@@ -1,5 +1,16 @@
 ---
-- name: Clona/atualiza repositório (via HTTPS, como root)
+# Cria {{ repo_dir }} com dono = {{ app_user }}
+- name: Ensure repo_dir exists and is writable by app_user
+  file:
+    path: "{{ repo_dir }}"
+    state: directory
+    owner: "{{ app_user }}"
+    group: "{{ app_user }}"
+    mode: '0755'
+  become: true
+
+# Clona como app_user (não root)
+- name: Clone/Update repository as app_user
   git:
     repo: "{{ repo_url }}"
     dest: "{{ repo_dir }}"
@@ -7,6 +18,7 @@
     update: yes
     force: yes
   become: true
+  become_user: "{{ app_user }}"
 
 # Verifica se existe package-lock.json no host remoto
 - name: Check if package-lock.json exists
