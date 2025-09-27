@@ -7,8 +7,8 @@
   become: true
 
 # tenta restartar; se falhar, seguimos para o start
-- name: PM2 restart api-mongo (se existir)
-  command: pm2 restart api-mongo --update-env
+- name: PM2 restart {{ app_name }} (se existir)
+  command: pm2 restart {{ app_name }} --update-env
   args:
     chdir: "{{ app_dir }}"
   become: true
@@ -16,8 +16,8 @@
   register: pm2_restart
   ignore_errors: true  # não para o play se der "not found"
 
-- name: PM2 start api-mongo (se não existir)
-  command: pm2 start dist/server.js --name api-mongo
+- name: PM2 start {{ app_name }} (se não existir)
+  command: pm2 start {{ app_entrypoint }} --name {{ app_name }}
   args:
     chdir: "{{ app_dir }}"
   become: true
