@@ -25,6 +25,9 @@ app_dir: "{{ repo_dir }}/{{ service_name }}"  # diretório da aplicação
 # Repositório Git da aplicação
 repo_url: "https://github.com/username/repository.git"
 repo_branch: "main"
+repo_version: null
+repo_commit: null
+repo_ref: "{{ repo_commit | default(repo_version, true) | default(repo_branch, true) }}"
 
 # Configuração do Node.js
 node_version: "18"                    # versão a instalar (via NodeSource)
