@@ -10,7 +10,7 @@
   roles:
     - { role: r1-users, tags: ["users", "infra"] }
     - { role: r2-common, tags: ["common", "infra"] }
-    - { role: r3-tmp, tags: ["tmp", "infra"] }
+    - { role: r3-tmp, tags: ["tmp", "infra", "app"] }
     - { role: r4-node, tags: ["node", "infra"] }
     - { role: r5-nginx, tags: ["nginx", "infra"] }
     - { role: r6-certbot, tags: ["certbot", "infra"] }
