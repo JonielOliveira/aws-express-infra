@@ -56,6 +56,12 @@ variable "domain_name" {
   type        = string
 }
 
+variable "subdomain_name" {
+  description = "Subdomínio que será usado para a aplicação (ex: api, backend, app)"
+  type        = string
+  default     = "api"
+}
+
 variable "create_eip" {
   description = "Se verdadeiro, aloca e associa um Elastic IP à instância."
   type        = bool

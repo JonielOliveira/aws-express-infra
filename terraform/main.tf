@@ -2,8 +2,8 @@
 locals {
   default_tags = {
     Project     = var.project_name
-    Environment = "universal"
-    Owner       = "joniel"
+    Environment = var.environment_name
+    Owner       = var.owner_name
     ManagedBy   = "terraform"
   }
 }
@@ -156,7 +156,7 @@ resource "aws_route53_zone" "api_main_zone" {
 # Registro DNS para o backend: api.meusite.com.br
 resource "aws_route53_record" "api_backend" {
   zone_id = aws_route53_zone.api_main_zone.zone_id
-  name    = "api.${var.domain_name}"
+  name    = "${var.subdomain_name}.${var.domain_name}"
   type    = "A"
   ttl     = 300
   records = var.create_eip ? [aws_eip.api_eip[0].public_ip] : [aws_instance.api_instance.public_ip]

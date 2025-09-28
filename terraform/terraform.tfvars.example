@@ -21,6 +21,7 @@ ssh_ingress_cidr = "0.0.0.0/0"            # ex: "254.128.254.128/32" (se seu IP 
 
 # Domínio / Route53
 domain_name      = "seudominio.com.br"    # domínio raiz (ex: "meudominio.com.br")
+subdomain_name   = "api"                  # subdomínio (ex: "api")
 
 # EIP e SSM (booleanos)
 create_eip       = true                   # true para alocar Elastic IP (IP público fixo), false para usar IP público efêmero
