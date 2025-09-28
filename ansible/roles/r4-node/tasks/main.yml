@@ -19,3 +19,14 @@
   apt:
     name: nodejs
     state: present
+
+- name: Verifica se o npm já está disponível
+  command: npm --version
+  register: npm_check
+  ignore_errors: yes
+
+- name: Instala NPM explicitamente (caso não tenha vindo junto)
+  apt:
+    name: npm
+    state: present
+  when: npm_check.rc != 0
